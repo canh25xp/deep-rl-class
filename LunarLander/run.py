@@ -14,11 +14,13 @@ def main():
     observation, info = env.reset()
 
     print("Running simulation...")
-    for _ in range(1000):
+
+    done = False
+    while not done:
         action, _states = model.predict(observation, deterministic=True)
         observation, reward, terminated, truncated, info = env.step(action)
-        if terminated or truncated:
-            observation, info = env.reset()
+
+        done = terminated or truncated
 
     env.close()
     print("Simulation complete!")

@@ -50,6 +50,7 @@ def main():
         gae_lambda=0.98,
         ent_coef=0.01,
         verbose=1,
+        device="cpu",
     )
 
     print("Training model...")

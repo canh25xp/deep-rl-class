@@ -5,7 +5,7 @@ from stable_baselines3.common.env_util import make_vec_env
 
 def main():
     print("Creating environment...")
-    env = make_vec_env("LunarLander-v2", n_envs=16)
+    env = make_vec_env("LunarLander-v3", n_envs=16)
 
     print("Initializing PPO model...")
     model = PPO(
@@ -23,7 +23,7 @@ def main():
     print("Training model...")
     model.learn(total_timesteps=1000000)
 
-    model_name = "ppo-LunarLander-v2"
+    model_name = "ppo-LunarLander-v3"
     print(f"Saving model to {model_name}.zip...")
     model.save(model_name)
     print("Training complete!")

@@ -1,5 +1,6 @@
 import gymnasium as gym
 import cv2
+import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import VecVideoRecorder
@@ -17,6 +18,7 @@ class EpisodeAnnotatorWrapper(gym.Wrapper):
     def render(self, *args, **kwargs):
         frame = self.env.render(*args, **kwargs)
         if frame is not None:
+            frame = np.asarray(frame)
             text = f"Episode: {self.episode_count}"
             frame = frame.copy()
             cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)

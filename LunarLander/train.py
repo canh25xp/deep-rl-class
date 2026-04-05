@@ -7,19 +7,22 @@ from stable_baselines3.common.vec_env import VecVideoRecorder
 
 
 class EpisodeAnnotatorWrapper(gym.Wrapper):
+    global_episode_count = 0
+
     def __init__(self, env):
         super().__init__(env)
-        self.episode_count = 0
+        self.current_episode = 0
 
     def reset(self, **kwargs):
-        self.episode_count += 1
+        EpisodeAnnotatorWrapper.global_episode_count += 1
+        self.current_episode = EpisodeAnnotatorWrapper.global_episode_count
         return super().reset(**kwargs)
 
     def render(self, *args, **kwargs):
         frame = self.env.render(*args, **kwargs)
         if frame is not None:
             frame = np.asarray(frame)
-            text = f"Episode: {self.episode_count}"
+            text = f"Episode: {self.current_episode}"
             frame = frame.copy()
             cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         return frame

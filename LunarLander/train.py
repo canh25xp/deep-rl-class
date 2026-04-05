@@ -38,8 +38,8 @@ def main():
     env = VecVideoRecorder(
         env,
         "videos",
-        record_video_trigger=lambda step: step % 100_000 == 0,
-        video_length=1000,
+        record_video_trigger=lambda step: step % 6_250 == 0,
+        video_length=500,
     )
 
     print("Initializing PPO model...")
@@ -57,7 +57,7 @@ def main():
     )
 
     print("Training model...")
-    model.learn(total_timesteps=1000000)
+    model.learn(total_timesteps=1_000_000)
 
     model_name = "ppo-LunarLander-v3"
     print(f"Saving model to {model_name}.zip...")

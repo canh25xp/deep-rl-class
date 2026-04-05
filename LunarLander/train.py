@@ -1,11 +1,35 @@
+import gymnasium as gym
+import cv2
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import VecVideoRecorder
 
 
+class EpisodeAnnotatorWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
+        self.episode_count = 0
+
+    def reset(self, **kwargs):
+        self.episode_count += 1
+        return super().reset(**kwargs)
+
+    def render(self, *args, **kwargs):
+        frame = self.env.render(*args, **kwargs)
+        if frame is not None:
+            text = f"Episode: {self.episode_count}"
+            frame = frame.copy()
+            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        return frame
+
+
 def main():
     print("Creating environment...")
-    env = make_vec_env("LunarLander-v3", n_envs=4)
+    env = make_vec_env(
+        "LunarLander-v3",
+        n_envs=4,
+        wrapper_class=EpisodeAnnotatorWrapper,
+    )
     env = VecVideoRecorder(
         env,
         "videos",

@@ -15,9 +15,7 @@ def main():
     eval_env = Monitor(gym.make("LunarLander-v3", render_mode="rgb_array"))
 
     print("Evaluating policy...")
-    mean_reward, std_reward = evaluate_policy(
-        model, eval_env, n_eval_episodes=10, deterministic=True
-    )
+    mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=10, deterministic=True)
     print(f"Evaluation complete: mean_reward={mean_reward:.2f} +/- {std_reward:.2f}")
 
 

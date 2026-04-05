@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 

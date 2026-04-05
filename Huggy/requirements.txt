@@ -1,0 +1,3 @@
+git+https://github.com/Unity-Technologies/ml-agents.git#egg=mlagents-envs&subdirectory=ml-agents-envs
+git+https://github.com/Unity-Technologies/ml-agents.git#egg=mlagents&subdirectory=ml-agents
+huggingface_hub

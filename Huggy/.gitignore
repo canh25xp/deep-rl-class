@@ -1,0 +1,19 @@
+# Python and Environments
+.venv/
+__pycache__/
+*.pyc
+
+# ML-Agents Outputs
+results/
+Summaries/
+
+# Downloaded Unity Environments
+trained-envs-executables/
+
+# IDE files
+.vscode/
+.idea/
+
+# Weights
+*.onnx
+*.pt

@@ -7,6 +7,11 @@ from stable_baselines3.common.vec_env import VecVideoRecorder
 
 
 class EpisodeAnnotatorWrapper(gym.Wrapper):
+    """
+    A Gym environment wrapper that annotates rendered frames with the current episode number.
+    It hooks into the `reset` and `render` methods to track episodes and overlay text.
+    """
+
     global_episode_count = 0
 
     def __init__(self, env):
@@ -19,17 +24,20 @@ class EpisodeAnnotatorWrapper(gym.Wrapper):
         return super().reset(**kwargs)
 
     def render(self, *args, **kwargs):
+        # Generate the original frame from the environment
         frame = self.env.render(*args, **kwargs)
         if frame is not None:
             frame = np.asarray(frame)
             text = f"Episode: {self.current_episode}"
             frame = frame.copy()
+            # Overlay the episode text on the top-left of the image
             cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         return frame
 
 
 def main():
     print("Creating environment...")
+    # Create a vectorized environment (16 parallel instances) for faster training
     env = make_vec_env(
         "LunarLander-v3",
         n_envs=16,
@@ -43,17 +51,19 @@ def main():
     )
 
     print("Initializing PPO model...")
+    # Initialize the Proximal Policy Optimization (PPO) agent
+    # We use an MlpPolicy (Multi-Layer Perceptron) because our input is a coordinate vector, not an image
     model = PPO(
         policy="MlpPolicy",
         env=env,
         n_steps=1024,
         batch_size=64,
         n_epochs=4,
-        gamma=0.999,
-        gae_lambda=0.98,
-        ent_coef=0.01,
+        gamma=0.999,  # Discount factor (how much the agent cares about long-term rewards)
+        gae_lambda=0.98,  # Bias vs variance trade-off factor for Generalized Advantage Estimator
+        ent_coef=0.01,  # Entropy coefficient (encourages exploration)
         verbose=1,
-        device="cpu",
+        device="cpu",  # Training forced on CPU (can be faster for lightweight vectorized envs)
     )
 
     print("Training model...")

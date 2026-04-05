@@ -32,13 +32,13 @@ def main():
     print("Creating environment...")
     env = make_vec_env(
         "LunarLander-v3",
-        n_envs=4,
+        n_envs=16,
         wrapper_class=EpisodeAnnotatorWrapper,
     )
     env = VecVideoRecorder(
         env,
         "videos",
-        record_video_trigger=lambda step: (step // 16384) % 6 == 0,
+        record_video_trigger=lambda step: step % 100_000 == 0,
         video_length=1000,
     )
 

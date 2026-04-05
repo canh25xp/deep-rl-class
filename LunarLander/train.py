@@ -3,11 +3,18 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import VecVideoRecorder
 
 
 def main():
     print("Creating environment...")
     env = make_vec_env("LunarLander-v3", n_envs=16)
+    env = VecVideoRecorder(
+        env,
+        "videos",
+        record_video_trigger=lambda step: step % 100_000 == 0,
+        video_length=2000,
+    )
 
     print("Initializing PPO model...")
     model = PPO(

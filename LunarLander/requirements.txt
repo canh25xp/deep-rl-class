@@ -1,4 +1,4 @@
 stable-baselines3
 swig
-gymnasium[box2d]
+gymnasium[box2d,other]
 huggingface_sb3
